@@ -128,6 +128,24 @@ class WidgetListTest < ActionDispatch::IntegrationTest
     assert_equal 'application/json', response.media_type
     assert_includes response.parsed_body.fetch('list'), 'Apple'
     refute_includes response.parsed_body.fetch('list'), 'Banana'
+
+    post administration_path, params: {
+      iframe: '1', BUTTON_VALUE: 'templateListJump', LIST_NAME: 'item_listing',
+      desiredController: 'widget_list_examples', desiredAction: 'item_listing',
+      searchClear: '1'
+    }
+    assert_response :success
+    jump_url = Nokogiri::HTML.fragment(response.parsed_body.fetch('list'))
+                       .at_css('#item_listing_jump_url')['value']
+    query = Rack::Utils.parse_query(URI.parse(jump_url).query)
+    assert_equal '1', query['iframe']
+    assert_equal 'widget_list_examples', query['desiredController']
+    assert_equal 'item_listing', query['desiredAction']
+
+    post "#{jump_url}&drill_down=filter_by_name&filter=Banana"
+    assert_response :success
+    assert_includes response.parsed_body.fetch('list'), 'Banana'
+    refute_includes response.parsed_body.fetch('list'), 'Apple'
   ensure
     originals&.each do |path, contents|
       if contents
