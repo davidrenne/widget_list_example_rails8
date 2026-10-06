@@ -1,0 +1,1 @@
+# widget_list_example_rails8
