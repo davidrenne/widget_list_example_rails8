@@ -1,5 +1,22 @@
-<h1>widget_list on Rails 8.1.4</h1>
-<p>Inventory grid backed by Sequel 5.109.0 and SQLite.</p>
-<p><%= link_to 'Ransack example', ransack_path %></p>
-<p><%= link_to 'Administration Console', administration_path if Rails.env.development? || Rails.env.test? %></p>
-<%= raw @output %>
+<main class="ai-shell">
+  <header class="ai-topbar">
+    <div class="ai-brand"><span class="ai-brand-mark">W<span>✦</span></span><span>widget_list <em>/ AI THEME</em></span></div>
+    <span class="ai-topbar-note">RAILS 8.1.4 · THEME PREVIEW</span>
+  </header>
+  <section class="ai-hero" aria-labelledby="demo-title">
+    <div class="ai-eyebrow"><span class="ai-status-dot"></span> INTELLIGENT INTERFACE SYSTEM / 001</div>
+    <h1 id="demo-title">Data, in a <span>new light.</span></h1>
+    <p>A dark, precise interface for the familiar widget_list workflow. Explore live inventory data with search, sorting, pagination, and CSV export.</p>
+    <div class="ai-chips"><span>SEQUEL 5.109</span><span>SQLITE</span><span>LIVE GRID</span></div>
+  </section>
+  <nav class="ai-nav" aria-label="Example pages">
+    <%= link_to 'Sequel grid', root_path, class: 'is-active', 'aria-current': 'page' %>
+    <%= link_to 'Ransack grid', ransack_path %>
+    <%= link_to 'Administration console', administration_path if Rails.env.development? || Rails.env.test? %>
+  </nav>
+  <section class="ai-panel" aria-label="Sequel inventory grid">
+    <div class="ai-panel-intro"><div><span class="ai-section-index">01 / INVENTORY</span><h2>Sequel data source</h2></div><span class="ai-panel-hint">Try searching for SKU 1001 ↗</span></div>
+    <%= raw @output %>
+  </section>
+  <footer class="ai-footer"><span>WIDGET_LIST / AI THEME</span><span>DESIGNED FOR DATA THAT MOVES</span></footer>
+</main>

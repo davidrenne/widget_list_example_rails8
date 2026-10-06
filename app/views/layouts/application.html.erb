@@ -19,11 +19,11 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "application", "widget_list", "widgets" %>
+    <%= stylesheet_link_tag "application", "widget_list", "widgets", "widget_list_theme_ai" %>
     <%= javascript_include_tag "application" %>
   </head>
 
-  <body>
+  <body class="<%= 'ai-demo' if controller_name == 'items' %>">
     <%= yield %>
   </body>
 </html>

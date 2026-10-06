@@ -16,8 +16,9 @@ class WidgetListTest < ActionDispatch::IntegrationTest
   test 'Sequel list renders SQLite rows and pagination' do
     get root_path
     assert_response :success
-    assert_select 'h1', text: 'widget_list on Rails 8.1.4'
-    assert_select 'table.widget_list'
+    assert_select 'h1', text: 'Data, in a new light.'
+    assert_select 'link[href*="widget_list_theme_ai"]'
+    assert_select 'table.widget_list.wl-ai-table'
     assert_select 'a[href=?]', administration_path
     assert_select 'td', text: 'Apple'
     assert_match 'Total 12 records found', response.body
@@ -30,6 +31,14 @@ class WidgetListTest < ActionDispatch::IntegrationTest
     assert_includes data.fetch('list'), 'Banana'
     assert_includes data.fetch('list'), '1001'
     refute_includes data.fetch('list'), '1002'
+  end
+
+  test 'Sequel Ajax pagination advances to the requested page' do
+    post root_path, params: { BUTTON_VALUE: 'templateListJump', LIST_NAME: 'items', LIST_SEQUENCE: '2' }
+    assert_response :success
+    list = response.parsed_body.fetch('list')
+    assert_includes list, '1010'
+    refute_includes list, '1000'
   end
 
   test 'Ransack filters Active Record results' do
