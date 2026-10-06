@@ -1,13 +1,3 @@
-GIT
-  remote: https://github.com/davidrenne/widget_list.git
-  revision: 8e9f260f39c506e8834a64b70d2535758d8b5e51
-  ref: 8e9f260f39c506e8834a64b70d2535758d8b5e51
-  specs:
-    widget_list (2.0.1)
-      csv (~> 3.3)
-      ransack (= 5.0.2)
-      sequel (= 5.109.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -246,6 +236,10 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    widget_list (2.0.1)
+      csv (~> 3.3)
+      ransack (= 5.0.2)
+      sequel (= 5.109.0)
     zeitwerk (2.8.3)
 
 PLATFORMS
@@ -265,7 +259,7 @@ DEPENDENCIES
   rails (= 8.1.4)
   sprockets-rails
   sqlite3 (>= 2.1)
-  widget_list!
+  widget_list (>= 2.0.1)
 
 BUNDLED WITH
    2.6.9
