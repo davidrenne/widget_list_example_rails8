@@ -240,6 +240,8 @@ GEM
       csv (~> 3.3)
       ransack (= 5.0.2)
       sequel (= 5.109.0)
+    widget_list_theme_ai (0.1.0)
+      widget_list (~> 2.0, >= 2.0.1)
     zeitwerk (2.8.3)
 
 PLATFORMS
@@ -260,6 +262,7 @@ DEPENDENCIES
   sprockets-rails
   sqlite3 (>= 2.1)
   widget_list (>= 2.0.1)
+  widget_list_theme_ai (= 0.1.0)
 
 BUNDLED WITH
    2.6.9

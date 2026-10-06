@@ -1,6 +1,6 @@
-# widget_list Rails 8 caller
+# widget_list Rails 8 caller with AI theme
 
-This is a **fresh Rails 8.1.4 app generated with `rails new . --minimal --database=sqlite3`** and configured to use `widget_list`. It has three working pages:
+This is a **fresh Rails 8.1.4 app generated with `rails new . --minimal --database=sqlite3`** and configured to use the published `widget_list` and [widget_list_theme_ai 0.1.0](https://rubygems.org/gems/widget_list_theme_ai) gems. The theme styles the live grids; this app's `application.css` adds the showcase header, navigation, and background. It has three working pages:
 
 - `/` — a Sequel SQL list with Ajax search, paging, sorting, and CSV export.
 - `/ransack` — the same SQLite records through Active Record and Ransack. Open the down arrow beside the search field to add a filter such as **Name contains Apple**.
@@ -16,7 +16,7 @@ This video shows the original 1.x interface. The pages in this app demonstrate t
 
 ## Run it
 
-Clone this repo and run it. The Gemfile pins the gem's 2.0.1 source commit on GitHub, because the administration fixes have not yet been published to RubyGems:
+Clone this repo and run it. The Gemfile installs both gems from RubyGems:
 
 ```sh
 git clone https://github.com/davidrenne/widget_list_example_rails8.git
@@ -30,12 +30,12 @@ bin/rails server
 
 Open [http://127.0.0.1:3000/](http://127.0.0.1:3000/), [http://127.0.0.1:3000/ransack](http://127.0.0.1:3000/ransack), and [http://127.0.0.1:3000/administration](http://127.0.0.1:3000/administration). Search for SKU `1001` on the first page or filter Name to `Apple` on the second. The two list pages also link to the administration console.
 
-The published 2.0.0 gem still works for the list pages. Once 2.0.1 is published, replace the Git source in [the Gemfile](Gemfile) with `gem 'widget_list', '~> 2.0.1'`, then run `bundle update widget_list`. This checkout has no relative path dependency on the gem repository.
+The [Gemfile](Gemfile) uses `gem 'widget_list', '>=2.0.1'` and `gem 'widget_list_theme_ai', '0.1.0'`. The [asset manifest](app/assets/config/manifest.js) exposes the theme CSS, and the [layout](app/views/layouts/application.html.erb) loads it after the core stylesheets. This checkout has no relative path dependency on either gem repository.
 
 ## Changes to make in your own Rails app
 
-1. Add `sprockets-rails`, `jquery-rails`, and the pinned `widget_list` Git source in [the Gemfile](Gemfile). Replace Rails 8's default `propshaft` entry with `sprockets-rails`. After 2.0.1 is published, use the RubyGems line above instead.
-2. Add [the asset manifest](app/assets/config/manifest.js) and [JavaScript entry point](app/assets/javascripts/application.js). Include `application.js`, `widget_list.css`, and `widgets.css` in [the layout](app/views/layouts/application.html.erb). Load `application.js` without `defer` so the wizard's inline script sees jQuery. The gem compiles its own image paths; there is no image copy step.
+1. Add `sprockets-rails`, `jquery-rails`, `widget_list`, and `widget_list_theme_ai` in [the Gemfile](Gemfile). Replace Rails 8's default `propshaft` entry with `sprockets-rails`.
+2. Add [the asset manifest](app/assets/config/manifest.js) and [JavaScript entry point](app/assets/javascripts/application.js). Include `application.js`, `widget_list.css`, `widgets.css`, and `widget_list_theme_ai.css` in [the layout](app/views/layouts/application.html.erb), with the theme CSS last. Load `application.js` without `defer` so the wizard's inline script sees jQuery. The gems compile their own image paths; there is no image copy step.
 3. If using Sequel, add [the database mapping](config/widget-list.yml): a Sequel URI as `:primary`, and an Active Record environment name as `:secondary`. Point SQLite at the same file as [Rails database.yml](config/database.yml). For Active Record only, this file is optional and the gem uses the current Rails database as primary.
 4. Add a model and allowlist the columns Ransack may search, as [Item](app/models/item.rb) does. Apply [the migration](db/migrate/20261006182200_create_items.rb) and create data with [the seeds](db/seeds.rb).
 5. Add GET and POST routes for each list endpoint, as in [routes.rb](config/routes.rb). `widget_list` posts Ajax search and paging requests back to the same action. Build the list in [ItemsController](app/controllers/items_controller.rb), handle its `html`, `json`, and `export` return types, and render `@output` in the corresponding view.

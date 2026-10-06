@@ -16,7 +16,7 @@ class WidgetListTest < ActionDispatch::IntegrationTest
   test 'Sequel list renders SQLite rows and pagination' do
     get root_path
     assert_response :success
-    assert_select 'h1', text: 'widget_list on Rails 8.1.4'
+    assert_select 'h1', text: 'Data, in a new light.'
     assert_select 'table.widget_list'
     assert_select 'a[href=?]', administration_path
     assert_select 'td', text: 'Apple'
