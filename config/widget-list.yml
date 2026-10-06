@@ -1,0 +1,12 @@
+development:
+  :primary: sqlite://<%= Rails.root.join('storage/development.sqlite3') %>
+  :secondary: development
+  :api_mode: false
+test:
+  :primary: sqlite://<%= Rails.root.join('storage/test.sqlite3') %>
+  :secondary: test
+  :api_mode: false
+production:
+  :primary: sqlite://<%= Rails.root.join('storage/production.sqlite3') %>
+  :secondary: production
+  :api_mode: false
