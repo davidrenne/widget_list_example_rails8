@@ -18,6 +18,7 @@ class WidgetListTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h1', text: 'widget_list on Rails 8.1.4'
     assert_select 'table.widget_list'
+    assert_select 'a[href=?]', administration_path
     assert_select 'td', text: 'Apple'
     assert_match 'Total 12 records found', response.body
   end
@@ -35,6 +36,7 @@ class WidgetListTest < ActionDispatch::IntegrationTest
     get ransack_path, params: { q: { name_cont: 'Apple' } }
     assert_response :success
     assert_select 'table.widget_list'
+    assert_select 'a[href=?]', administration_path
     assert_includes response.body, 'Apple'
     refute_includes response.body, '<span  style="" onclick="">Banana</span>'
     assert_match 'Total 6 records found', response.body
@@ -45,5 +47,55 @@ class WidgetListTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 'text/csv', response.media_type
     assert_includes response.body, 'Apple'
+  end
+
+  test 'administration console renders its setup wizard' do
+    get administration_path
+    assert_response :success
+    assert_select 'form#widget_list_administration'
+    assert_includes response.body, 'Step One - Start'
+  end
+
+  test 'administration console loads model fields over Ajax' do
+    post administration_path, params: { ajax: '1', model: 'Item' }
+    assert_response :success
+    assert_includes response.parsed_body.fetch('fields'), 'name'
+  end
+
+  test 'administration previews a model and generates Rails 8 controller code' do
+    files = %w[widget-list-administration.json widget-list-administration-all.json].map do |name|
+      Rails.root.join('config', name)
+    end
+    originals = files.to_h { |path| [path, path.exist? ? path.binread : nil] }
+    configuration = {
+      name: 'item_listing', view: 'Item', desiredController: 'widget_list_examples',
+      desiredAction: 'item_listing', title: 'Items', listDescription: 'Showing Items',
+      noDataMessage: 'No Items', searchTitle: 'Search items', rowLimit: '10', showPagination: '1',
+      showSearch: '1', useRansack: '1', useSort: '1',
+      fields: { key: %w[id name], description: %w[ID Name] }
+    }
+
+    post administration_path, params: configuration.merge(ajax: '1', save: '1')
+    assert_response :success
+
+    get administration_path, params: {
+      iframe: '1', desiredController: 'widget_list_examples', desiredAction: 'item_listing'
+    }
+    assert_response :success
+    assert_select 'table.widget_list'
+    assert_includes response.body, 'Apple'
+
+    post administration_path, params: configuration
+    assert_response :success
+    assert_includes response.body, 'Item.ransack(params[:q])'
+    assert_includes response.body, 'render json: JSON.parse(output)'
+  ensure
+    originals&.each do |path, contents|
+      if contents
+        path.binwrite(contents)
+      elsif path.exist?
+        path.delete
+      end
+    end
   end
 end

@@ -7,4 +7,6 @@
 /storage/*
 !/storage/.keep
 /public/assets/
+/config/widget-list-administration.json
+/config/widget-list-administration-all.json
 /.DS_Store

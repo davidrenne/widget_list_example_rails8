@@ -1,4 +1,5 @@
 <h1>widget_list on Rails 8.1.4</h1>
-<p>Inventory grid backed by the local widget_list checkout and SQLite.</p>
+<p>Inventory grid backed by Sequel 5.109.0 and SQLite.</p>
 <p><%= link_to 'Ransack example', ransack_path %></p>
+<p><%= link_to 'Administration Console', administration_path if Rails.env.development? || Rails.env.test? %></p>
 <%= raw @output %>

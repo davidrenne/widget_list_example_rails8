@@ -1,4 +1,5 @@
 <h1>widget_list on Rails 8.1.4</h1>
 <p>Inventory grid backed by Active Record and Ransack 5.0.2.</p>
 <p><%= link_to 'Sequel example', root_path %></p>
+<p><%= link_to 'Administration Console', administration_path if Rails.env.development? || Rails.env.test? %></p>
 <%= raw @output %>
