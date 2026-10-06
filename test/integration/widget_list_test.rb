@@ -98,4 +98,43 @@ class WidgetListTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  test 'administration drill-down Ajax filters by the selected column' do
+    files = %w[widget-list-administration.json widget-list-administration-all.json].map do |name|
+      Rails.root.join('config', name)
+    end
+    originals = files.to_h { |path| [path, path.exist? ? path.binread : nil] }
+    configuration = {
+      name: 'item_listing', view: 'Item', desiredController: 'widget_list_examples',
+      desiredAction: 'item_listing', title: 'Items', listDescription: 'Showing Items',
+      noDataMessage: 'No Items', rowLimit: '10', showPagination: '1',
+      fields: { key: %w[id name_linked], description: %w[ID Name] },
+      fields_hidden: { key: ['name'] }, drillDownsOn: '1',
+      drill_downs: {
+        drill_down_name: ['filter_by_name'], data_to_pass_from_view: ['name'],
+        column_to_show: ['name_linked']
+      }
+    }
+
+    post administration_path, params: configuration.merge(ajax: '1', save: '1')
+    assert_response :success
+
+    post administration_path, params: {
+      iframe: '1', BUTTON_VALUE: 'templateListJump', LIST_NAME: 'item_listing',
+      desiredController: 'widget_list_examples', desiredAction: 'item_listing',
+      drill_down: 'filter_by_name', filter: 'Apple'
+    }
+    assert_response :success
+    assert_equal 'application/json', response.media_type
+    assert_includes response.parsed_body.fetch('list'), 'Apple'
+    refute_includes response.parsed_body.fetch('list'), 'Banana'
+  ensure
+    originals&.each do |path, contents|
+      if contents
+        path.binwrite(contents)
+      elsif path.exist?
+        path.delete
+      end
+    end
+  end
 end

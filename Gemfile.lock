@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/davidrenne/widget_list.git
-  revision: b22e40a9d4f0612afc9170030db22c78a75e5e0e
-  ref: b22e40a9d4f0612afc9170030db22c78a75e5e0e
+  revision: 2217a249bfa55b74e0ec98cd557c908f2621d9b1
+  ref: 2217a249bfa55b74e0ec98cd557c908f2621d9b1
   specs:
     widget_list (2.0.1)
       csv (~> 3.3)
